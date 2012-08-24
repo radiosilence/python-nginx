@@ -1,56 +1,4 @@
 import copy
-import json
-import yaml
-
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
-
-EXAMPLE = """server {
-    listen 80;
-    server_name %(name)s %(aliases)s;
-    client_max_body_size 4G;
-    keepalive_timeout 5;
-
-    location / {
-        try_files $uri @%(name)s;
-    }
-
-    location /media {
-        alias %(path)s/%(name)s/%(name)s/media/;
-        expires 1h;
-    }
-
-    location @%(name)s {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
-        proxy_set_header  X-Real-IP  $remote_addr;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass http://app_server_%(name)s;
-    }
-}
-server {
-    listen 80;
-    server_name %(name)s %(aliases)s;
-    root        %(path)s/%(name)s/%(name)s/_wwwroot;
-    access_log  %(path)s/%(name)s/access.log;
-    autoindex   on;
-
-    location ~* \.(jpg|jpeg|gif|css|png|js|ico)$ {
-        access_log      off;
-        expires         30d;
-    }
-
-    location / {
-        try_files $uri /maintenance.html /index.html =404;
-    }
-}
-"""
-
-from pprint import PrettyPrinter
-pp = PrettyPrinter(indent=4)
 
 def loads(string):
     def process_block(string):
@@ -104,8 +52,3 @@ def loads(string):
         return current_block
 
     return process_block(string)
-
-if __name__ == '__main__':
-    #
-    print(yaml.dump(loads(EXAMPLE), default_flow_style=False, Dumper=Dumper))
-    #print(json.dumps(loads(EXAMPLE)))
