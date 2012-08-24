@@ -1,6 +1,8 @@
 python-nginx
 ============
 
+**WARNING: CURRENTLY ALPHA AS FUCK**
+
 This is a simple reader/writer of nginx config files, for use in config
 generation because string manipulation is so '90s.
 
