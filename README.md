@@ -1,9 +1,10 @@
 python-nginx
 ============
 
-Simple reader/writer of nginx config files, for use in config generation.
+This is a simple reader/writer of nginx config files, for use in config
+generation because string manipulation is so '90s.
 
-Python 3 compatible.
+It also works with Python 3!
 
 
 Quickstart
