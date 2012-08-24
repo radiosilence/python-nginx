@@ -68,20 +68,21 @@ def loads(string):
                     current_word = ''
                 if not 'name' in current_block:
                     current_block['name'] = {}
-                current_block['name'] = ' '.join(current_statement)
+                current_block['name'] = current_statement
                 current_statement = []
             elif char == '}':
                 inner = current_block
                 current_block = stack.pop()
                 name = inner['name']
                 del inner['name']
-                if not 'blocks' in inner:
-                    inner['blocks'] = {}
                 if not 'blocks' in current_block:
                     current_block['blocks'] = {}
-                if not name in current_block['blocks']:
-                    current_block['blocks'][name] = []
-                current_block['blocks'][name].append(inner)
+                key = name[0]
+                if len(name) > 1:
+                    inner['args'] = name[1:]
+                if not key in current_block['blocks']:
+                    current_block['blocks'][key] = []
+                current_block['blocks'][key].append(inner)
             elif char == ';':
                 current_statement.append(current_word)
                 current_word = ''
@@ -106,5 +107,5 @@ def loads(string):
 
 if __name__ == '__main__':
     #
-    #print(yaml.dump(loads(EXAMPLE), default_flow_style=False, Dumper=Dumper))
-    print(json.dumps(loads(EXAMPLE)))
+    print(yaml.dump(loads(EXAMPLE), default_flow_style=False, Dumper=Dumper))
+    #print(json.dumps(loads(EXAMPLE)))
