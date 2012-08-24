@@ -31,15 +31,12 @@ pp = PrettyPrinter(indent=4)
 
 def loads(string):
     def process_block(words):
-        blocks = []
         block_stack = []
         block_template = {
             'lines': [],
-            'name': [],
-            'blocks': []
+            'blocks': {}
         }
         current_block = copy.deepcopy(block_template)
-        append_block = False
         current_statement = []
         for word in words:
             word = word.replace('\n', '')
@@ -48,21 +45,29 @@ def loads(string):
                 if char == '{':
                     block_stack.append(current_block)
                     current_block = copy.deepcopy(block_template)
-                    current_block['name'] = current_statement
+                    current_statement.append(current_word)
+                    current_word = ''
+                    current_block['name'] = ' '.join(current_statement)
                     current_statement = []
                 elif char == '}':
                     inner = current_block
                     current_block = block_stack.pop()
-                    current_block['blocks'].append(inner)
+                    current_block['blocks'][inner['name']] = inner
+                    del inner['name']
                 current_word += char
 
-            if current_word[-1] in ['}', '{', ';']:
-                word = current_word[:-1]
+            starts_special = current_word[0] in ('{',)
+            ends_special = current_word[-1] in ('}', ';')
+            if starts_special or ends_special:
+                if starts_special:
+                    word = current_word[1:]
+                if ends_special:
+                    word = current_word[:-1]
                 if len(word) > 0:
                     current_statement.append(word)
-                if len(current_statement) > 0:
-                    current_block['lines'].append(current_statement)
-                current_statement = []
+                if ends_special and len(current_statement) > 0:
+                    current_block['lines'].append(' '.join(current_statement))
+                    current_statement = []
             else:
                 current_statement.append(current_word)
         return current_block
