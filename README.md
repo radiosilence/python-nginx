@@ -19,6 +19,32 @@ Quickstart
 
     print(data)
 
+The data structure is something like this:
+
+    {'blocks':
+        {'server':
+            [
+                {'blocks':
+                    {'location':
+                        [
+                            {
+                                'args': ['/'],
+                                'lines': {
+                                    'try_files': [
+                                        '$request_uri index.html'
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+
+It is quite verbose, however grouping things in lists allows for easier
+iteration over, for instance, all location blocks, when processing.
+
 
 
 TODO
