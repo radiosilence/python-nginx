@@ -54,24 +54,25 @@ pp = PrettyPrinter(indent=4)
 
 def loads(string):
     def process_block(string):
-        block_stack = []
+        stack = []
         current_block = {}
         current_statement = []
 
         current_word = ''
         for char in string:
             if char == '{':
-                block_stack.append(current_block)
+                stack.append(current_block)
                 current_block = {}
-                current_statement.append(current_word)
-                current_word = ''
+                if len(current_word) > 0:
+                    current_statement.append(current_word)
+                    current_word = ''
                 if not 'name' in current_block:
                     current_block['name'] = {}
                 current_block['name'] = ' '.join(current_statement)
                 current_statement = []
             elif char == '}':
                 inner = current_block
-                current_block = block_stack.pop()
+                current_block = stack.pop()
                 name = inner['name']
                 del inner['name']
                 if not 'blocks' in inner:
@@ -99,24 +100,6 @@ def loads(string):
             else:
                 current_word += char
 
-        # starts_special = current_word[0] in ('{',)
-        # ends_special = current_word[-1] in ('}', ';')
-        # if starts_special or ends_special:
-        #     if starts_special:
-        #         word = current_word[1:]
-        #     if ends_special:
-        #         word = current_word[:-1]
-        #     if len(word) > 0:
-        #         current_statement.append(word)
-        #     if ends_special and len(current_statement) > 0:
-        #         print (current_statement)
-        #         key = current_statement[0]
-        #         if not key in current_block['lines']:
-        #             current_block['lines'][key] = []
-        #         current_block['lines'][key].append(' '.join(current_statement[1:]))
-        #         current_statement = []
-        # else:
-        #     current_statement.append(current_word)
         return current_block
 
     return process_block(string)
