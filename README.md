@@ -28,7 +28,9 @@ Quickstart
             print(location)
 
     # Dump a config file.
-    nginx.dumps(root)
+    print(root)
+    # alternatively:
+    print(root.dump(indent=1))
 
 
 TODO
