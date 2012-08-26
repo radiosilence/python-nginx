@@ -17,7 +17,8 @@ Quickstart
     import nginx
 
     # Note that this is poorly formatted, but still valid!
-    config = """server { location / { try_files $request_uri index.html; }}"""
+    config = """server { server_name www.example.com; location / { try_files
+        $request_uri index.html; }}"""
 
     root = nginx.loads(config)
 
@@ -27,11 +28,33 @@ Quickstart
         for location in server.query('location', '/'):
             print(location)
 
+    # Output:
+    # server_name www.example.com;
+    # location / {
+    #     try_files $request_uri index.html;
+    # }
+
     # Dump a config file.
     print(root)
+
+    # Output:
+    # server  {
+    #     server_name www.example.com;
+    #     location / {
+    #         try_files $request_uri index.html;
+    #     }
+    # }
+
     # alternatively:
     print(root.dump(indent=1))
 
+    # Output:
+    #     server  {
+    #         server_name www.example.com;
+    #         location / {
+    #             try_files $request_uri index.html;
+    #         }
+    #     }
 
 TODO
 ----
