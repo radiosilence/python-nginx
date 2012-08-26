@@ -36,4 +36,5 @@ Quickstart
 TODO
 ----
 
-Much more to come on querying and manipulation of config.
+* Much more to come on querying and manipulation of config.
+* Support for retaining comments.
