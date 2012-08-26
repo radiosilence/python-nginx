@@ -25,6 +25,26 @@ class Node(object):
             args
         )
 
+    def query(self, directive, *args, first=False, **kwargs):
+        results = filter(lambda c: c.directive == directive, self.children)
+        i = 0
+        results = filter(lambda c: len(c.args) >= len(args), results)
+        for arg in args:
+            old_results = results
+            results = []
+            for result in old_results:
+                try:
+                    if args[i] == arg:
+                        results.append(result)
+                except IndexError:
+                    pass
+            i += 1
+
+        if first:
+            return list(results)[0]
+
+        return results
+
     def dump(self, indent=0):
         def get_children(_indent):
             return '\n'.join(

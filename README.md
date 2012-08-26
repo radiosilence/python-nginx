@@ -6,6 +6,8 @@ python-nginx
 This is a simple reader/writer of nginx config files, for use in config
 generation because string manipulation is so '90s.
 
+Also has a handy query class for manipulating config.
+
 It also works with Python 3!
 
 
@@ -17,39 +19,19 @@ Quickstart
     # Note that this is poorly formatted, but still valid!
     config = """server { location / { try_files $request_uri index.html; }}"""
 
-    data = nginx.loads(config)
+    root = nginx.loads(config)
 
-    print(data)
+    # Example, print server names and / locations for each server:
+    for server in root.query('server'):
+        print(server.query('server_name', first=True))
+        for location in server.query('location', '/'):
+            print(location)
 
-The data structure is something like this:
-
-    {'blocks':
-        {'server':
-            [
-                {'blocks':
-                    {'location':
-                        [
-                            {
-                                'args': ['/'],
-                                'lines': {
-                                    'try_files': [
-                                        '$request_uri index.html'
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
-    }
-
-It is quite verbose, however grouping things in lists allows for easier
-iteration over, for instance, all location blocks, when processing.
-
+    # Dump a config file.
+    nginx.dumps(root)
 
 
 TODO
 ----
 
-* Dumping/writing nginx config.
+Much more to come on querying and manipulation of config.
