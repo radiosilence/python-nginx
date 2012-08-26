@@ -21,7 +21,7 @@ class Node(object):
         else:
             args = ''
         return '<Node: {}{}>'.format(
-            self.directive,
+            self.directive or '*root*',
             args
         )
 

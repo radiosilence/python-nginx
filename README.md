@@ -8,7 +8,7 @@ generation because string manipulation is so '90s.
 
 Also has a handy query class for manipulating config.
 
-It also works with Python 3!
+Totally compatible with Python 3!
 
 
 Quickstart
